@@ -5,6 +5,8 @@ import { FormFieldStack } from '@/components/FormFieldStack'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 import type { StepComponentProps } from '@/types'
 
 export default function StepParties({
@@ -19,6 +21,9 @@ export default function StepParties({
 
   const toggle = (list: string[] = [], item: string) =>
     list.includes(item) ? list.filter((entry) => entry !== item) : [...list, item]
+
+  const isAddDisabled = !data.newParty?.trim()
+  const helperId = 'party-extra-helper'
 
   return (
     <div className="space-y-8">
@@ -60,32 +65,46 @@ export default function StepParties({
           </div>
         </FormFieldStack>
 
-        <FormFieldStack
-          label="Add another person"
-          helperText="Use this for witnesses or supporters not listed above."
-          htmlFor="additional-party"
-        >
-          <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="w-full space-y-2">
+            <Label htmlFor="party-extra" className="text-cb-gray300">
+              Add another person
+            </Label>
             <Input
-              id="additional-party"
+              id="party-extra"
               placeholder="Add another person"
               value={data.newParty || ''}
               onChange={(event) => update({ newParty: event.target.value })}
+              aria-describedby={helperId}
+              aria-invalid={isAddDisabled}
+              className={cn(
+                'w-full rounded-2xl border-white/10 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold',
+                isAddDisabled && 'border-cb-danger focus-visible:ring-cb-danger'
+              )}
             />
-            <Button
-              onClick={() => {
-                if (!data.newParty?.trim()) return
-                update({
-                  parties: [...(data.parties || []), data.newParty.trim()],
-                  newParty: '',
-                })
-              }}
-              className="w-full rounded-full bg-cb-gold px-5 text-cb-navy hover:bg-cb-gold-light sm:w-auto"
+            <p
+              id={helperId}
+              className={cn('text-xs text-cb-gray400', isAddDisabled && 'text-cb-danger')}
             >
-              Add
-            </Button>
+              {isAddDisabled
+                ? 'Enter a name to enable the Add button.'
+                : 'Type a name and press Add.'}
+            </p>
           </div>
-        </FormFieldStack>
+          <Button
+            onClick={() => {
+              if (!data.newParty?.trim()) return
+              update({
+                parties: [...(data.parties || []), data.newParty.trim()],
+                newParty: '',
+              })
+            }}
+            disabled={isAddDisabled}
+            className="w-full rounded-full bg-cb-gold px-5 text-cb-navy hover:bg-cb-gold-light sm:w-auto"
+          >
+            Add
+          </Button>
+        </div>
       </SectionCard>
 
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
