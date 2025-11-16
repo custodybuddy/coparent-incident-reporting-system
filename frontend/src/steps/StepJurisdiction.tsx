@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import SectionCard from '@/components/SectionCard'
+import { FormFieldStack } from '@/components/FormFieldStack'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -56,25 +57,32 @@ export default function StepJurisdiction({
       </div>
 
       <SectionCard className="space-y-8">
-        <div className="space-y-2">
-          <label className="text-xs uppercase tracking-wide text-cb-gray400">Jurisdiction *</label>
+        <FormFieldStack
+          label="Jurisdiction"
+          required
+          helperText="Choose the region handling this case."
+          htmlFor="jurisdiction-select"
+        >
           <Select value={data.jurisdiction || ''} onValueChange={(value) => update({ jurisdiction: value })}>
-            <SelectTrigger className="rounded-2xl border-white/10 bg-cb-navy text-cb-gray100">
+            <SelectTrigger id="jurisdiction-select">
               <SelectValue placeholder="Select your region" />
             </SelectTrigger>
-            <SelectContent className="border-white/10 bg-cb-navy-dark text-cb-gray100">
+            <SelectContent>
               <SelectItem value="Ontario">Ontario</SelectItem>
               <SelectItem value="British Columbia">British Columbia</SelectItem>
               <SelectItem value="Alberta">Alberta</SelectItem>
               <SelectItem value="Quebec">Quebec</SelectItem>
             </SelectContent>
           </Select>
-        </div>
+        </FormFieldStack>
 
-        <div className="space-y-4">
-          <label className="text-xs uppercase tracking-wide text-cb-gray400">Evidence (optional)</label>
-
+        <FormFieldStack
+          label="Evidence"
+          helperText="Upload screenshots, call logs, or other supporting proof (optional)."
+          htmlFor="evidence-upload"
+        >
           <Input
+            id="evidence-upload"
             type="file"
             onChange={(event) => {
               const file = event.target.files?.[0]
@@ -83,7 +91,6 @@ export default function StepJurisdiction({
                 evidence: [...(data.evidence || []), createEvidenceItem(file)],
               })
             }}
-            className="rounded-2xl border-white/10 bg-cb-navy py-2 text-cb-gray100"
           />
 
           {data.evidence?.length ? (
@@ -110,7 +117,7 @@ export default function StepJurisdiction({
           ) : (
             <p className="text-xs text-cb-gray400">Upload screenshots, call logs, or other supporting proof.</p>
           )}
-        </div>
+        </FormFieldStack>
       </SectionCard>
 
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

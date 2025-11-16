@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Mic } from 'lucide-react'
 
 import SectionCard from '@/components/SectionCard'
+import { FormFieldStack } from '@/components/FormFieldStack'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
@@ -41,21 +42,24 @@ export default function StepNarrative({
       </div>
 
       <SectionCard className="space-y-8">
-        <div className="space-y-3">
-          <div className="flex flex-wrap items-center justify-between text-xs uppercase tracking-wide text-cb-gray400">
-            <span>Incident description (min 100 characters) *</span>
-            <span className={tooShort ? 'text-cb-warning' : 'text-cb-success'}>
-              {count}/100
-            </span>
-          </div>
-
+        <FormFieldStack
+          label="Incident description"
+          required
+          helperText={
+            <div className="flex flex-wrap items-center justify-between text-xs uppercase tracking-wide text-cb-gray400">
+              <span>Minimum 100 characters</span>
+              <span className={tooShort ? 'text-cb-warning' : 'text-cb-success'}>{count}/100</span>
+            </div>
+          }
+          htmlFor="incident-narrative"
+        >
           <Textarea
+            id="incident-narrative"
             value={data.narrative}
             onChange={(event) => update({ narrative: event.target.value })}
             placeholder="Write the narrative here. Include specifics such as quotes, actions, and any relevant sequence of events."
-            className="min-h-[240px] rounded-2xl border-white/10 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
           />
-        </div>
+        </FormFieldStack>
 
         <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm text-cb-gray300">
