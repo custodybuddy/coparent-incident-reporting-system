@@ -47,7 +47,7 @@ export default function App() {
             className="h-1 bg-cb-navy-light"
             indicatorClassName="bg-cb-gold"
           />
-          <div className="flex justify-between text-xs text-cb-gray300">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-center text-xs text-cb-gray300 sm:justify-between">
             {[
               'Consent',
               'Date & Time',
@@ -58,7 +58,7 @@ export default function App() {
             ].map((label, index) => (
               <span
                 key={label}
-                className={step >= index + 1 ? 'text-cb-gold' : undefined}
+                className={`min-w-0 px-1 sm:px-0 ${step >= index + 1 ? 'text-cb-gold' : ''}`}
               >
                 {label}
               </span>
