@@ -63,10 +63,10 @@ export default function StepDateTime({
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-2xl justify-between">
+      <div className="mx-auto max-w-2xl flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full">
         <Button
           onClick={() => back?.()}
-          className="rounded-xl border border-cb-gold bg-cb-navy px-6 py-3 text-cb-gold hover:bg-cb-navy-light"
+          className="w-full sm:w-auto rounded-xl border border-cb-gold bg-cb-navy px-6 py-3 text-cb-gold hover:bg-cb-navy-light"
         >
           ← Back
         </Button>
@@ -74,7 +74,7 @@ export default function StepDateTime({
         <Button
           disabled={!canContinue}
           onClick={() => next?.()}
-          className="rounded-xl bg-cb-gold px-6 py-3 font-semibold text-cb-navy hover:bg-cb-gold-light disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full sm:w-auto rounded-xl bg-cb-gold px-6 py-3 font-semibold text-cb-navy hover:bg-cb-gold-light disabled:cursor-not-allowed disabled:opacity-50"
         >
           Continue →
         </Button>

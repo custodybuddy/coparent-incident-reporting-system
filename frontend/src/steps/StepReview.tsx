@@ -92,10 +92,10 @@ export default function StepReview({
         )}
       </div>
 
-      <div className="mx-auto flex max-w-3xl justify-between">
+      <div className="mx-auto max-w-3xl flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full">
         <Button
           onClick={() => back?.()}
-          className="rounded-xl border border-cb-gold bg-cb-navy px-6 py-3 text-cb-gold hover:bg-cb-navy-light"
+          className="w-full sm:w-auto rounded-xl border border-cb-gold bg-cb-navy px-6 py-3 text-cb-gold hover:bg-cb-navy-light"
         >
           ← Back
         </Button>
@@ -103,7 +103,7 @@ export default function StepReview({
         {report ? (
           <Button
             onClick={onExport}
-            className="rounded-xl bg-cb-gold px-6 py-3 text-cb-navy hover:bg-cb-gold-light"
+            className="w-full sm:w-auto rounded-xl bg-cb-gold px-6 py-3 text-cb-navy hover:bg-cb-gold-light"
           >
             Print / Save PDF
           </Button>
@@ -111,7 +111,7 @@ export default function StepReview({
           <Button
             onClick={onGenerate}
             disabled={loading}
-            className="rounded-xl border border-cb-gold bg-transparent px-6 py-3 text-cb-gold hover:bg-cb-navy-light disabled:opacity-50"
+            className="w-full sm:w-auto rounded-xl border border-cb-gold bg-transparent px-6 py-3 text-cb-gold hover:bg-cb-navy-light disabled:opacity-50"
           >
             {loading ? 'Generating…' : 'Generate Summary'}
           </Button>
