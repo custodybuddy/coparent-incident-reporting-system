@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Mic } from 'lucide-react'
 
+import SectionCard from '@/components/SectionCard'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
@@ -19,31 +20,30 @@ export default function StepNarrative({
   useEffect(() => headingRef.current?.focus(), [])
 
   return (
-    <div className="space-y-10">
-      <div className="mb-4 text-center">
+    <div className="space-y-8">
+      <div className="text-center">
         <img
           src="https://custodybuddy.com/incident-report/img/WriteIcon.png"
           alt=""
-          className="mx-auto mb-4 h-24 w-28"
+          className="mx-auto mb-4 h-20 w-24"
         />
 
         <h1
           ref={headingRef}
           tabIndex={-1}
-          className="mb-2 text-3xl font-bold text-cb-gold sm:text-4xl"
+          className="text-3xl font-bold text-cb-gold sm:text-4xl"
         >
-          The Incident Narrative
+          The incident narrative
         </h1>
-        <p className="mx-auto max-w-lg text-sm text-cb-gray300">
-          Describe the incident objectively. Avoid emotional language—focus on
-          what was seen, heard, or documented.
+        <p className="mx-auto mt-3 max-w-2xl text-sm text-cb-gray300">
+          Describe what happened in the order it occurred. Stick to neutral language and what you saw, heard, or documented.
         </p>
       </div>
 
-      <div className="mx-auto space-y-8 rounded-2xl border border-cb-gray700 bg-cb-navy-dark/70 p-6 shadow-lg max-w-3xl">
-        <div className="space-y-2">
-          <div className="flex justify-between text-xs text-cb-gray300">
-            <span>Incident Description (min 100 characters) *</span>
+      <SectionCard className="space-y-8">
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between text-xs uppercase tracking-wide text-cb-gray400">
+            <span>Incident description (min 100 characters) *</span>
             <span className={tooShort ? 'text-cb-warning' : 'text-cb-success'}>
               {count}/100
             </span>
@@ -53,45 +53,41 @@ export default function StepNarrative({
             value={data.narrative}
             onChange={(event) => update({ narrative: event.target.value })}
             placeholder="Write the narrative here. Include specifics such as quotes, actions, and any relevant sequence of events."
-            className="min-h-[220px] rounded-xl border-cb-gray700 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
+            className="min-h-[240px] rounded-2xl border-white/10 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
           />
         </div>
 
-        <div className="flex flex-col gap-3 rounded-xl border border-cb-gray700 bg-cb-navy-dark/80 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="text-xs text-cb-gray300">
-            <div className="font-medium text-cb-gray100">Voice dictation</div>
-            <div>Tap start and dictate your narrative hands-free.</div>
+        <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="text-sm text-cb-gray300">
+            <div className="font-semibold text-white">Voice dictation</div>
+            <p className="text-xs text-cb-gray400">Tap start and dictate your narrative hands-free.</p>
           </div>
-          <Button
-            variant="outline"
-            className="gap-2 border-cb-gold text-cb-gold hover:bg-cb-navy-light"
-          >
+          <Button variant="outline" className="gap-2 rounded-full border-cb-gold text-cb-gold hover:bg-cb-navy-light">
             <Mic className="h-4 w-4" /> Start dictation
           </Button>
         </div>
 
-        <Separator className="bg-cb-gray700" />
+        <Separator className="bg-white/10" />
 
-        <div className="flex gap-2 rounded-xl border border-cb-gold/40 bg-cb-navy-light/20 px-4 py-3 text-xs text-cb-gray100">
-          <div className="mt-1 h-2 w-2 rounded-full bg-cb-gold" />
+        <div className="flex items-start gap-3 rounded-2xl border border-cb-gold/40 bg-cb-navy-light/10 px-4 py-4 text-sm text-cb-gray100">
+          <div className="mt-1 h-2.5 w-2.5 rounded-full bg-cb-gold" />
           <p>
-            <strong className="text-cb-gold">Tip:</strong> Stick to facts. Avoid
-            emotional interpretations or assumptions.
+            <strong className="text-cb-gold">Tip:</strong> Stick to facts. Avoid emotional interpretations or assumptions.
           </p>
         </div>
-      </div>
+      </SectionCard>
 
-      <div className="mx-auto max-w-3xl flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Button
           onClick={() => back?.()}
-          className="w-full sm:w-auto rounded-xl border border-cb-gold bg-cb-navy px-6 py-3 text-cb-gold hover:bg-cb-navy-light"
+          className="w-full rounded-full border border-white/20 bg-transparent px-8 py-3 text-cb-gray200 hover:bg-white/5 sm:w-auto"
         >
           ← Back
         </Button>
         <Button
           disabled={tooShort}
           onClick={() => next?.()}
-          className="w-full sm:w-auto rounded-xl bg-cb-gold px-6 py-3 text-cb-navy hover:bg-cb-gold-light disabled:opacity-50"
+          className="w-full rounded-full bg-cb-gold px-8 py-3 text-cb-navy hover:bg-cb-gold-light disabled:opacity-50 sm:w-auto"
         >
           Continue →
         </Button>

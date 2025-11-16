@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 
+import SectionCard from '@/components/SectionCard'
 import { Button } from '@/components/ui/button'
 import type { AiReport, StepComponentProps } from '@/types'
 
@@ -24,78 +25,74 @@ export default function StepReview({
   useEffect(() => headingRef.current?.focus(), [])
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <div className="text-center">
         <img
           src="https://custodybuddy.com/incident-report/img/ReviewIcon.png"
           alt=""
-          className="mx-auto mb-4 h-24 w-28"
+          className="mx-auto mb-4 h-20 w-24"
         />
 
         <h1
           ref={headingRef}
           tabIndex={-1}
-          className="mb-2 text-3xl font-bold text-cb-gold focus:outline-none sm:text-4xl"
+          className="text-3xl font-bold text-cb-gold focus:outline-none sm:text-4xl"
         >
-          Review & Export
+          Review & export
         </h1>
 
-        <p className="mx-auto max-w-lg text-sm text-cb-gray300">
-          Review the AI-generated summary and export your report as a court-ready
-          document.
+        <p className="mx-auto mt-3 max-w-2xl text-sm text-cb-gray300">
+          Generate your AI summary, double-check the highlights, and export a polished PDF for court or counsel.
         </p>
       </div>
 
-      <div className="mx-auto space-y-6 rounded-2xl border border-cb-gray700 bg-cb-navy-dark/70 p-6 shadow-lg max-w-3xl">
+      <SectionCard className="space-y-6">
         {!report ? (
           <div className="text-center text-cb-gray300">
             {error && <p className="mb-2 text-cb-warning">{error}</p>}
-            <p className="mb-4">
-              Generate your professional summary based on the information
-              provided.
-            </p>
+            <p className="mb-5">Generate your professional summary based on the information provided.</p>
             <Button
               onClick={onGenerate}
               disabled={loading}
-              className="rounded-xl bg-cb-gold px-6 py-3 text-cb-navy hover:bg-cb-gold-light disabled:opacity-50"
+              className="rounded-full bg-cb-gold px-8 py-3 text-cb-navy hover:bg-cb-gold-light disabled:opacity-50"
             >
               {loading ? 'Generating…' : 'Generate Summary'}
             </Button>
           </div>
         ) : (
-          <div className="space-y-4 text-cb-gray100">
+          <div className="space-y-6 text-cb-gray100">
             <div>
               <h2 className="text-xl font-semibold text-cb-gold">Summary</h2>
-              <p className="text-sm text-cb-gray300">{report.summary}</p>
+              <p className="mt-2 text-sm text-cb-gray300">{report.summary}</p>
+            </div>
+
+            <div className="grid gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 sm:grid-cols-2">
+              <div>
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-cb-gray400">Severity</h3>
+                <p className="mt-1 capitalize text-white">{report.severity}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-cb-gray400">Legal note</h3>
+                <p className="mt-1 text-xs text-cb-gray300">{report.legal}</p>
+              </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-cb-gray100">
-                Key Facts
-              </h3>
-              <ul className="list-disc space-y-1 pl-5 text-sm text-cb-gray300">
+              <h3 className="text-lg font-semibold text-white">Key facts</h3>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-cb-gray300">
                 {(report.keyFacts || []).map((fact, index) => (
                   <li key={`${fact}-${index}`}>{fact}</li>
                 ))}
               </ul>
             </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-cb-gray100">
-                Severity
-              </h3>
-              <p className="capitalize text-cb-gray300">{report.severity}</p>
-            </div>
-
-            <p className="text-xs text-cb-gray500">{report.legal}</p>
           </div>
         )}
-      </div>
+      </SectionCard>
 
-      <div className="mx-auto max-w-3xl flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Button
           onClick={() => back?.()}
-          className="w-full sm:w-auto rounded-xl border border-cb-gold bg-cb-navy px-6 py-3 text-cb-gold hover:bg-cb-navy-light"
+          className="w-full rounded-full border border-white/20 bg-transparent px-8 py-3 text-cb-gray200 hover:bg-white/5 sm:w-auto"
         >
           ← Back
         </Button>
@@ -103,7 +100,7 @@ export default function StepReview({
         {report ? (
           <Button
             onClick={onExport}
-            className="w-full sm:w-auto rounded-xl bg-cb-gold px-6 py-3 text-cb-navy hover:bg-cb-gold-light"
+            className="w-full rounded-full bg-cb-gold px-8 py-3 text-cb-navy hover:bg-cb-gold-light sm:w-auto"
           >
             Print / Save PDF
           </Button>
@@ -111,7 +108,7 @@ export default function StepReview({
           <Button
             onClick={onGenerate}
             disabled={loading}
-            className="w-full sm:w-auto rounded-xl border border-cb-gold bg-transparent px-6 py-3 text-cb-gold hover:bg-cb-navy-light disabled:opacity-50"
+            className="w-full rounded-full border border-cb-gold px-8 py-3 text-cb-gold hover:bg-white/5 disabled:opacity-50 sm:w-auto"
           >
             {loading ? 'Generating…' : 'Generate Summary'}
           </Button>
