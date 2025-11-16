@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Info } from 'lucide-react'
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import type { AiReport, StepComponentProps } from '@/types'
 
@@ -9,109 +7,115 @@ type StepReviewProps = StepComponentProps & {
   report: AiReport | null
   loading: boolean
   error?: string | null
-  onGenerate: () => Promise<AiReport>
+  onGenerate: () => Promise<AiReport> | void
   onExport: () => void
 }
 
 export default function StepReview({
-  data,
-  back,
   report,
   loading,
   error,
   onGenerate,
   onExport,
+  back,
 }: StepReviewProps) {
   const headingRef = useRef<HTMLHeadingElement>(null)
 
-  useEffect(() => {
-    headingRef.current?.focus()
-  }, [])
-  const handleGenerate = async () => {
-    await onGenerate()
-  }
+  useEffect(() => headingRef.current?.focus(), [])
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2 text-cb-gold-light">
-        <Info className="h-6 w-6" aria-hidden />
+    <div className="space-y-10">
+      <div className="text-center">
+        <img
+          src="https://custodybuddy.com/incident-report/img/ReviewIcon.png"
+          alt=""
+          className="mx-auto mb-4 h-24 w-28"
+        />
+
         <h1
           ref={headingRef}
           tabIndex={-1}
-          className="text-3xl font-semibold text-cb-gray-100 focus:outline-none"
+          className="mb-2 text-3xl font-bold text-cb-gold focus:outline-none sm:text-4xl"
         >
-          Review & AI summary
+          Review & Export
         </h1>
+
+        <p className="mx-auto max-w-lg text-sm text-cb-gray300">
+          Review the AI-generated summary and export your report as a court-ready
+          document.
+        </p>
       </div>
-      <p className="text-sm text-cb-gray300">
-        Confirm details before exporting or sharing with counsel.
-      </p>
 
-      <section className="rounded-lg border p-4 text-sm">
-        <p>
-          <strong>Date:</strong> {data.date || 'Not provided'} at{' '}
-          {data.time || 'Not provided'}
-        </p>
-        <p>
-          <strong>Jurisdiction:</strong> {data.jurisdiction || 'Not provided'}
-        </p>
-        <p>
-          <strong>Narrative:</strong> {data.narrative || 'Not provided'}
-        </p>
-        <p>
-          <strong>Parties:</strong>{' '}
-          {data.parties.length ? data.parties.join(', ') : 'None'}
-        </p>
-        <p>
-          <strong>Evidence items:</strong> {data.evidence.length}
-        </p>
-      </section>
-
-      <section className="space-y-4">
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold">AI summary</h2>
-          <p className="text-sm text-muted-foreground">
-            The AI summary helps surface severity and legal notes for quick
-            review. Always confirm details before sharing.
-          </p>
-        </div>
-        {error && (
-          <Alert variant="destructive">
-            <AlertTitle>Unable to generate</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-        {report ? (
-          <div className="space-y-2 rounded-lg border p-4">
-            <p className="text-sm font-semibold">{report.category}</p>
-            <p className="text-sm capitalize">Severity: {report.severity}</p>
-            <p className="text-sm">{report.summary}</p>
-            <p className="text-xs text-muted-foreground">{report.legal}</p>
+      <div className="mx-auto space-y-6 rounded-2xl border border-cb-gray700 bg-cb-navy-dark/70 p-6 shadow-lg max-w-3xl">
+        {!report ? (
+          <div className="text-center text-cb-gray300">
+            {error && <p className="mb-2 text-cb-warning">{error}</p>}
+            <p className="mb-4">
+              Generate your professional summary based on the information
+              provided.
+            </p>
+            <Button
+              onClick={onGenerate}
+              disabled={loading}
+              className="rounded-xl bg-cb-gold px-6 py-3 text-cb-navy hover:bg-cb-gold-light disabled:opacity-50"
+            >
+              {loading ? 'Generating…' : 'Generate Summary'}
+            </Button>
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">
-            No summary yet. Run the AI summary to populate this section.
-          </p>
-        )}
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={handleGenerate} disabled={loading}>
-            {loading ? 'Generating…' : 'Run AI summary'}
-          </Button>
-          <Button variant="secondary" onClick={onExport} disabled={!report}>
-            Export HTML
-          </Button>
-        </div>
-      </section>
+          <div className="space-y-4 text-cb-gray100">
+            <div>
+              <h2 className="text-xl font-semibold text-cb-gold">Summary</h2>
+              <p className="text-sm text-cb-gray300">{report.summary}</p>
+            </div>
 
-      <div className="flex justify-start">
+            <div>
+              <h3 className="text-lg font-semibold text-cb-gray100">
+                Key Facts
+              </h3>
+              <ul className="list-disc space-y-1 pl-5 text-sm text-cb-gray300">
+                {(report.keyFacts || []).map((fact, index) => (
+                  <li key={`${fact}-${index}`}>{fact}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-cb-gray100">
+                Severity
+              </h3>
+              <p className="capitalize text-cb-gray300">{report.severity}</p>
+            </div>
+
+            <p className="text-xs text-cb-gray500">{report.legal}</p>
+          </div>
+        )}
+      </div>
+
+      <div className="mx-auto flex max-w-3xl justify-between">
         <Button
-          variant="outline"
-          onClick={() => {
-            back?.()
-          }}
+          onClick={() => back?.()}
+          className="rounded-xl border border-cb-gold bg-cb-navy px-6 py-3 text-cb-gold hover:bg-cb-navy-light"
         >
-          Back
+          ← Back
         </Button>
+
+        {report ? (
+          <Button
+            onClick={onExport}
+            className="rounded-xl bg-cb-gold px-6 py-3 text-cb-navy hover:bg-cb-gold-light"
+          >
+            Print / Save PDF
+          </Button>
+        ) : (
+          <Button
+            onClick={onGenerate}
+            disabled={loading}
+            className="rounded-xl border border-cb-gold bg-transparent px-6 py-3 text-cb-gold hover:bg-cb-navy-light disabled:opacity-50"
+          >
+            {loading ? 'Generating…' : 'Generate Summary'}
+          </Button>
+        )}
       </div>
     </div>
   )

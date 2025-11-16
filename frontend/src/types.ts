@@ -25,6 +25,7 @@ export interface AiReport {
   category: string
   severity: 'low' | 'medium' | 'high'
   legal: string
+  keyFacts?: string[]
 }
 
 export type WizardStepId =
