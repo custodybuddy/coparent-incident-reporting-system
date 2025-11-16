@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import SectionCard from '@/components/SectionCard'
+import { FormFieldStack } from '@/components/FormFieldStack'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -41,11 +42,13 @@ export default function StepParties({
       </div>
 
       <SectionCard className="space-y-6">
-        <div>
-          <p className="text-xs uppercase tracking-wide text-cb-gray400">People *</p>
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <FormFieldStack label="People" required helperText="Select everyone who was present or involved.">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {['You', 'Other Parent', 'Child 1', 'Child 2'].map((person) => (
-              <label key={person} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white">
+              <label
+                key={person}
+                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white"
+              >
                 <Checkbox
                   checked={data.parties?.includes(person)}
                   onCheckedChange={() => update({ parties: toggle(data.parties, person) })}
@@ -55,28 +58,34 @@ export default function StepParties({
               </label>
             ))}
           </div>
-        </div>
+        </FormFieldStack>
 
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Input
-            placeholder="Add another person"
-            value={data.newParty || ''}
-            onChange={(event) => update({ newParty: event.target.value })}
-            className="w-full rounded-2xl border-white/10 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
-          />
-          <Button
-            onClick={() => {
-              if (!data.newParty?.trim()) return
-              update({
-                parties: [...(data.parties || []), data.newParty.trim()],
-                newParty: '',
-              })
-            }}
-            className="w-full rounded-full bg-cb-gold px-5 text-cb-navy hover:bg-cb-gold-light sm:w-auto"
-          >
-            Add
-          </Button>
-        </div>
+        <FormFieldStack
+          label="Add another person"
+          helperText="Use this for witnesses or supporters not listed above."
+          htmlFor="additional-party"
+        >
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Input
+              id="additional-party"
+              placeholder="Add another person"
+              value={data.newParty || ''}
+              onChange={(event) => update({ newParty: event.target.value })}
+            />
+            <Button
+              onClick={() => {
+                if (!data.newParty?.trim()) return
+                update({
+                  parties: [...(data.parties || []), data.newParty.trim()],
+                  newParty: '',
+                })
+              }}
+              className="w-full rounded-full bg-cb-gold px-5 text-cb-navy hover:bg-cb-gold-light sm:w-auto"
+            >
+              Add
+            </Button>
+          </div>
+        </FormFieldStack>
       </SectionCard>
 
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
