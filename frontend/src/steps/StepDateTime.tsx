@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import SectionCard from '@/components/SectionCard'
+import { FormFieldGrid, FormFieldStack } from '@/components/FormFieldStack'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { StepComponentProps } from '@/types'
@@ -43,27 +44,25 @@ export default function StepDateTime({
       </div>
 
       <SectionCard className="space-y-6">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div className="space-y-2">
-            <label className="text-xs uppercase tracking-wide text-cb-gray400">Date *</label>
+        <FormFieldGrid columns={2}>
+          <FormFieldStack label="Date" required htmlFor="incident-date">
             <Input
+              id="incident-date"
               type="date"
               value={data.date || ''}
               onChange={(event) => update({ date: event.target.value })}
-              className="rounded-2xl border-white/10 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
             />
-          </div>
+          </FormFieldStack>
 
-          <div className="space-y-2">
-            <label className="text-xs uppercase tracking-wide text-cb-gray400">Time *</label>
+          <FormFieldStack label="Time" required htmlFor="incident-time">
             <Input
+              id="incident-time"
               type="time"
               value={data.time || ''}
               onChange={(event) => update({ time: event.target.value })}
-              className="rounded-2xl border-white/10 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
             />
-          </div>
-        </div>
+          </FormFieldStack>
+        </FormFieldGrid>
 
         <p className="text-xs text-cb-gray400">
           Tip: Approximate time is okay—note what you remember most clearly.

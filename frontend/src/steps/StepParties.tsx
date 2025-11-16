@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import SectionCard from '@/components/SectionCard'
+import { FormFieldStack } from '@/components/FormFieldStack'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -46,11 +47,13 @@ export default function StepParties({
       </div>
 
       <SectionCard className="space-y-6">
-        <div>
-          <p className="text-xs uppercase tracking-wide text-cb-gray400">People *</p>
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <FormFieldStack label="People" required helperText="Select everyone who was present or involved.">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {['You', 'Other Parent', 'Child 1', 'Child 2'].map((person) => (
-              <label key={person} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white">
+              <label
+                key={person}
+                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white"
+              >
                 <Checkbox
                   checked={data.parties?.includes(person)}
                   onCheckedChange={() => update({ parties: toggle(data.parties, person) })}
@@ -60,7 +63,7 @@ export default function StepParties({
               </label>
             ))}
           </div>
-        </div>
+        </FormFieldStack>
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="w-full space-y-2">
