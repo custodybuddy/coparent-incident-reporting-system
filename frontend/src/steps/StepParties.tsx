@@ -4,6 +4,8 @@ import SectionCard from '@/components/SectionCard'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 import type { StepComponentProps } from '@/types'
 
 export default function StepParties({
@@ -18,6 +20,9 @@ export default function StepParties({
 
   const toggle = (list: string[] = [], item: string) =>
     list.includes(item) ? list.filter((entry) => entry !== item) : [...list, item]
+
+  const isAddDisabled = !data.newParty?.trim()
+  const helperId = 'party-extra-helper'
 
   return (
     <div className="space-y-8">
@@ -58,12 +63,31 @@ export default function StepParties({
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Input
-            placeholder="Add another person"
-            value={data.newParty || ''}
-            onChange={(event) => update({ newParty: event.target.value })}
-            className="w-full rounded-2xl border-white/10 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
-          />
+          <div className="w-full space-y-2">
+            <Label htmlFor="party-extra" className="text-cb-gray300">
+              Add another person
+            </Label>
+            <Input
+              id="party-extra"
+              placeholder="Add another person"
+              value={data.newParty || ''}
+              onChange={(event) => update({ newParty: event.target.value })}
+              aria-describedby={helperId}
+              aria-invalid={isAddDisabled}
+              className={cn(
+                'w-full rounded-2xl border-white/10 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold',
+                isAddDisabled && 'border-cb-danger focus-visible:ring-cb-danger'
+              )}
+            />
+            <p
+              id={helperId}
+              className={cn('text-xs text-cb-gray400', isAddDisabled && 'text-cb-danger')}
+            >
+              {isAddDisabled
+                ? 'Enter a name to enable the Add button.'
+                : 'Type a name and press Add.'}
+            </p>
+          </div>
           <Button
             onClick={() => {
               if (!data.newParty?.trim()) return
@@ -72,6 +96,7 @@ export default function StepParties({
                 newParty: '',
               })
             }}
+            disabled={isAddDisabled}
             className="w-full rounded-full bg-cb-gold px-5 text-cb-navy hover:bg-cb-gold-light sm:w-auto"
           >
             Add
