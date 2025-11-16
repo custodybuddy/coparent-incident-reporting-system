@@ -1,3 +1,22 @@
+const plugin = require("tailwindcss/plugin")
+
+const formFieldPlugin = plugin(({ addComponents }) => {
+  addComponents({
+    ".form-field-token": {
+      "@apply":
+        "w-full min-h-[44px] rounded-cb-sm border border-cb-gray500 bg-cb-gray700 px-3 py-2.5 text-base text-white shadow-cb-sm transition-colors placeholder:text-cb-gray500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-gold focus-visible:ring-offset-2 focus-visible:border-cb-gold disabled:cursor-not-allowed disabled:opacity-60 md:text-sm",
+    },
+    ".form-field-token[data-state=error], .form-field-token[data-field-state=error]": {
+      "@apply":
+        "border-cb-danger focus-visible:ring-cb-danger focus-visible:border-cb-danger",
+    },
+    ".form-field-token[data-state=success], .form-field-token[data-field-state=success]": {
+      "@apply":
+        "border-cb-success focus-visible:ring-cb-success focus-visible:border-cb-success",
+    },
+  })
+})
+
 module.exports = {
   content: [
     "./index.html",
@@ -27,5 +46,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [formFieldPlugin],
 };
