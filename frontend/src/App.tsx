@@ -1,3 +1,4 @@
+import Header from '@/components/Header'
 import { Progress } from '@/components/ui/progress'
 import { useWizard } from '@/hooks/useWizard'
 import { exportHtml } from '@/services/exportHtml'
@@ -18,6 +19,8 @@ export default function App() {
     report,
     aiLoading,
     aiError,
+    reset,
+    goToStep,
     goToReviewAndGenerate,
   } = useWizard()
 
@@ -27,22 +30,15 @@ export default function App() {
     }
   }
 
+  const handleCreateNewReport = () => {
+    reset()
+    goToStep(0)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <div className="min-h-screen bg-cb-navy-dark text-cb-gray-100">
-      <header className="flex items-center justify-between border-b border-cb-gray700 bg-cb-navy px-6 py-4 text-sm">
-        <div className="flex items-center space-x-3">
-          <div className="h-8 w-8 rounded-full bg-cb-gold" />
-          <div className="flex flex-col leading-tight">
-            <span className="font-semibold text-cb-gold">Report An Incident</span>
-            <span className="text-xs text-cb-gray300">
-              Transform toxic behaviour into court-ready documentation.
-            </span>
-          </div>
-        </div>
-        <button className="rounded-full bg-cb-gold px-4 py-2 text-xs font-semibold text-cb-navy transition hover:bg-cb-gold-light">
-          Create New Report
-        </button>
-      </header>
+      <Header onCreateNewReport={handleCreateNewReport} />
 
       <main className="mx-auto flex max-w-5xl flex-col space-y-6 px-4 pb-12 pt-8">
         <div className="space-y-3">
