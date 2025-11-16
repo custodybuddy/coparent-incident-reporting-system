@@ -14,8 +14,10 @@ export interface IncidentData {
   parties: string[]
   children: string[]
   jurisdiction: string | null
+  newParty?: string
   caseNumber?: string
   evidence: EvidenceItem[]
+  uploads?: File[]
 }
 
 export interface AiReport {

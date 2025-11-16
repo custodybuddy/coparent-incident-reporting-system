@@ -12,8 +12,10 @@ const createDefaultData = (): IncidentData => ({
   parties: [],
   children: [],
   jurisdiction: null,
+  newParty: '',
   caseNumber: '',
   evidence: [],
+  uploads: [],
 })
 
 const getInitialData = (): IncidentData => {

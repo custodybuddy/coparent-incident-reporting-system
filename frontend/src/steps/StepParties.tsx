@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import type { StepComponentProps } from '@/types'
 
@@ -11,163 +11,88 @@ export default function StepParties({
   next,
   back,
 }: StepComponentProps) {
-  const [partyInput, setPartyInput] = useState('')
-  const [childInput, setChildInput] = useState('')
   const headingRef = useRef<HTMLHeadingElement>(null)
 
-  useEffect(() => {
-    headingRef.current?.focus()
-  }, [])
+  useEffect(() => headingRef.current?.focus(), [])
 
-  const addEntry = (value: string, key: 'parties' | 'children') => {
-    const trimmed = value.trim()
-    if (!trimmed) return
-    const nextValue =
-      key === 'parties'
-        ? { parties: [...data.parties, trimmed] }
-        : { children: [...data.children, trimmed] }
-    update(nextValue)
-  }
-
-  const removeEntry = (name: string, key: 'parties' | 'children') => {
-    const nextValue =
-      key === 'parties'
-        ? { parties: data.parties.filter((entry) => entry !== name) }
-        : { children: data.children.filter((entry) => entry !== name) }
-    update(nextValue)
-  }
+  const toggle = (list: string[] = [], item: string) =>
+    list.includes(item) ? list.filter((entry) => entry !== item) : [...list, item]
 
   return (
-    <div className="space-y-8">
-      <h1
-        ref={headingRef}
-        tabIndex={-1}
-        className="text-3xl font-semibold text-cb-gray-100 focus:outline-none"
-      >
-        Who was involved?
-      </h1>
-      <p className="text-muted-foreground text-sm">
-        Add parents, caregivers, and children referenced in this report.
-      </p>
+    <div className="space-y-10">
+      <div className="mb-4 text-center">
+        <img
+          src="https://custodybuddy.com/incident-report/img/PeopleIcon.png"
+          alt=""
+          className="mx-auto mb-4 h-24 w-28"
+        />
 
-      <section className="space-y-3">
-        <p className="text-sm font-medium">Adults / caregivers</p>
-        <div className="flex gap-2">
-          <Input
-            value={partyInput}
-            placeholder="Add a name"
-            onChange={(event) => setPartyInput(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault()
-                addEntry(partyInput, 'parties')
-                setPartyInput('')
-              }
-            }}
-          />
-          <Button
-            type="button"
-            onClick={() => {
-              addEntry(partyInput, 'parties')
-              setPartyInput('')
-            }}
-          >
-            Add
-          </Button>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {data.parties.map((party) => (
-            <Badge
-              key={party}
-              variant="secondary"
-              className="flex items-center gap-2"
-            >
-              {party}
-              <button
-                type="button"
-                aria-label={`Remove ${party}`}
-                className="text-xs"
-                onClick={() => removeEntry(party, 'parties')}
-              >
-                ×
-              </button>
-            </Badge>
-          ))}
-          {!data.parties.length && (
-            <p className="text-sm text-muted-foreground">
-              No adults added yet.
-            </p>
-          )}
-        </div>
-      </section>
-
-      <section className="space-y-3">
-        <p className="text-sm font-medium">Children</p>
-        <div className="flex gap-2">
-          <Input
-            value={childInput}
-            placeholder="Add a child"
-            onChange={(event) => setChildInput(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault()
-                addEntry(childInput, 'children')
-                setChildInput('')
-              }
-            }}
-          />
-          <Button
-            type="button"
-            onClick={() => {
-              addEntry(childInput, 'children')
-              setChildInput('')
-            }}
-          >
-            Add
-          </Button>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {data.children.map((child) => (
-            <Badge
-              key={child}
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              {child}
-              <button
-                type="button"
-                aria-label={`Remove ${child}`}
-                className="text-xs"
-                onClick={() => removeEntry(child, 'children')}
-              >
-                ×
-              </button>
-            </Badge>
-          ))}
-          {!data.children.length && (
-            <p className="text-sm text-muted-foreground">
-              No children added yet.
-            </p>
-          )}
-        </div>
-      </section>
-
-      <div className="flex justify-between">
-        <Button
-          variant="outline"
-          onClick={() => {
-            back?.()
-          }}
-          disabled={!back}
+        <h1
+          ref={headingRef}
+          tabIndex={-1}
+          className="mb-2 text-3xl font-bold text-cb-gold sm:text-4xl"
         >
-          Back
+          Who Was Involved?
+        </h1>
+        <p className="mx-auto max-w-lg text-sm text-cb-gray300">
+          Select all relevant people involved in the incident, including yourself
+          and any children.
+        </p>
+      </div>
+
+      <div className="mx-auto space-y-8 rounded-2xl border border-cb-gray700 bg-cb-navy-dark/70 p-6 shadow-lg max-w-3xl">
+        <div className="space-y-4">
+          <div className="font-semibold text-cb-gray100">People *</div>
+
+          {['You', 'Other Parent', 'Child 1', 'Child 2'].map((person) => (
+            <label key={person} className="flex items-center gap-3 text-cb-gray100">
+              <Checkbox
+                checked={data.parties?.includes(person)}
+                onCheckedChange={() =>
+                update({ parties: toggle(data.parties, person) })
+              }
+              className="border-cb-gold text-cb-gold data-[state=checked]:bg-cb-gold data-[state=checked]:text-cb-navy"
+            />
+            {person}
+          </label>
+          ))}
+
+          <div className="flex gap-3">
+            <Input
+              placeholder="Add another person"
+              value={data.newParty || ''}
+              onChange={(event) => update({ newParty: event.target.value })}
+              className="rounded-xl border-cb-gray700 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
+            />
+            <Button
+              onClick={() => {
+                if (!data.newParty?.trim()) return
+                update({
+                  parties: [...(data.parties || []), data.newParty.trim()],
+                  newParty: '',
+                })
+              }}
+              className="rounded-xl bg-cb-gold px-5 text-cb-navy hover:bg-cb-gold-light"
+            >
+              Add
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto flex max-w-3xl justify-between">
+        <Button
+          onClick={() => back?.()}
+          className="rounded-xl border border-cb-gold bg-cb-navy px-6 py-3 text-cb-gold hover:bg-cb-navy-light"
+        >
+          ← Back
         </Button>
         <Button
-          onClick={() => {
-            next?.()
-          }}
+          disabled={!data.parties?.length}
+          onClick={() => next?.()}
+          className="rounded-xl bg-cb-gold px-6 py-3 text-cb-navy hover:bg-cb-gold-light disabled:opacity-50"
         >
-          Continue
+          Continue →
         </Button>
       </div>
     </div>
