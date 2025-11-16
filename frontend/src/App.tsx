@@ -1,3 +1,4 @@
+import { Progress } from '@/components/ui/progress'
 import { useWizard } from '@/hooks/useWizard'
 import { exportHtml } from '@/services/exportHtml'
 import StepConsent from '@/steps/StepConsent'
@@ -6,15 +7,6 @@ import StepNarrative from '@/steps/StepNarrative'
 import StepParties from '@/steps/StepParties'
 import StepJurisdiction from '@/steps/StepJurisdiction'
 import StepReview from '@/steps/StepReview'
-
-const STEP_LABELS = [
-  'Consent',
-  'Date & Time',
-  'What Happened',
-  'Who Was Involved',
-  'Location & Law',
-  'Review',
-]
 
 export default function App() {
   const {
@@ -36,82 +28,74 @@ export default function App() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#010A1A] text-white">
-      <header className="w-full border-b border-[#2a3347] bg-[#050816]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl border border-[#D4A83B]/40 bg-[#D4A83B]/10" />
-            <div className="leading-tight">
-              <p className="text-sm font-semibold text-[#D4A83B]">
-                Report An Incident
-              </p>
-              <p className="text-xs text-slate-300">
-                Transform toxic behaviour into court-ready evidence.
-              </p>
-            </div>
+    <div className="min-h-screen bg-cb-navy-dark text-cb-gray-100">
+      <header className="flex items-center justify-between border-b border-cb-gray700 bg-cb-navy px-6 py-4 text-sm">
+        <div className="flex items-center space-x-3">
+          <div className="h-8 w-8 rounded-full bg-cb-gold" />
+          <div className="flex flex-col leading-tight">
+            <span className="font-semibold text-cb-gold">Report An Incident</span>
+            <span className="text-xs text-cb-gray300">
+              Transform toxic behaviour into court-ready documentation.
+            </span>
           </div>
         </div>
+        <button className="rounded-full bg-cb-gold px-4 py-2 text-xs font-semibold text-cb-navy transition hover:bg-cb-gold-light">
+          Create New Report
+        </button>
       </header>
 
-      <main className="flex flex-1 justify-center px-4 py-10">
-        <div className="w-full max-w-4xl space-y-6">
-          <div className="mb-6 flex justify-between text-xs font-medium text-slate-300">
-            {STEP_LABELS.map((label, index) => {
-              const n = index + 1
-              const isActive = n === step
-              const isDone = n < step
-              return (
-                <div
-                  key={label}
-                  className="flex w-full flex-col items-center gap-1"
-                >
-                  <div
-                    className={[
-                      'flex h-10 w-10 items-center justify-center rounded-full border text-sm',
-                      isActive
-                        ? 'bg-[#00C27A] border-[#00C27A]'
-                        : isDone
-                        ? 'bg-[#D4A83B] border-[#D4A83B]'
-                        : 'bg-[#101827] border-[#1f2937]',
-                    ].join(' ')}
-                  >
-                    {isDone ? '✓' : n}
-                  </div>
-                  <span className="max-w-[80px] truncate text-center text-[11px] text-slate-300">
-                    {label}
-                  </span>
-                </div>
-              )
-            })}
+      <main className="mx-auto flex max-w-5xl flex-col space-y-6 px-4 pb-12 pt-8">
+        <div className="space-y-3">
+          <Progress
+            value={(step / 6) * 100}
+            className="h-1 bg-cb-navy-light"
+            indicatorClassName="bg-cb-gold"
+          />
+          <div className="flex justify-between text-xs text-cb-gray300">
+            {[
+              'Consent',
+              'Date & Time',
+              'What Happened',
+              'Who Was Involved',
+              'Location & Evidence',
+              'Review & Export',
+            ].map((label, index) => (
+              <span
+                key={label}
+                className={step >= index + 1 ? 'text-cb-gold' : undefined}
+              >
+                {label}
+              </span>
+            ))}
           </div>
+        </div>
 
-          <div className="rounded-3xl border border-[#2a3347] bg-[#050816] px-6 py-8 shadow-[0_20px_40px_rgba(0,0,0,0.6)] sm:px-8">
-            {step === 1 && <StepConsent data={data} update={update} next={next} />}
-            {step === 2 && (
-              <StepDateTime data={data} update={update} next={next} back={back} />
-            )}
-            {step === 3 && (
-              <StepNarrative data={data} update={update} next={next} back={back} />
-            )}
-            {step === 4 && (
-              <StepParties data={data} update={update} next={next} back={back} />
-            )}
-            {step === 5 && (
-              <StepJurisdiction data={data} update={update} next={next} back={back} />
-            )}
-            {step === 6 && (
-              <StepReview
-                data={data}
-                update={update}
-                back={back}
-                report={report}
-                loading={aiLoading}
-                error={aiError}
-                onGenerate={goToReviewAndGenerate}
-                onExport={handleExport}
-              />
-            )}
-          </div>
+        <div className="mx-auto w-full max-w-3xl">
+          {step === 1 && <StepConsent data={data} update={update} next={next} />}
+          {step === 2 && (
+            <StepDateTime data={data} update={update} next={next} back={back} />
+          )}
+          {step === 3 && (
+            <StepNarrative data={data} update={update} next={next} back={back} />
+          )}
+          {step === 4 && (
+            <StepParties data={data} update={update} next={next} back={back} />
+          )}
+          {step === 5 && (
+            <StepJurisdiction data={data} update={update} next={next} back={back} />
+          )}
+          {step === 6 && (
+            <StepReview
+              data={data}
+              update={update}
+              back={back}
+              report={report}
+              loading={aiLoading}
+              error={aiError}
+              onGenerate={goToReviewAndGenerate}
+              onExport={handleExport}
+            />
+          )}
         </div>
       </main>
     </div>
