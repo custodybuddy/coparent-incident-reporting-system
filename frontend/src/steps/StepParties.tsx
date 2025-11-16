@@ -57,12 +57,12 @@ export default function StepParties({
           </label>
           ))}
 
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <Input
               placeholder="Add another person"
               value={data.newParty || ''}
               onChange={(event) => update({ newParty: event.target.value })}
-              className="rounded-xl border-cb-gray700 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
+              className="w-full rounded-xl border-cb-gray700 bg-cb-navy text-cb-gray100 focus-visible:ring-cb-gold"
             />
             <Button
               onClick={() => {
@@ -72,7 +72,7 @@ export default function StepParties({
                   newParty: '',
                 })
               }}
-              className="rounded-xl bg-cb-gold px-5 text-cb-navy hover:bg-cb-gold-light"
+              className="sm:w-auto w-full rounded-xl bg-cb-gold px-5 text-cb-navy hover:bg-cb-gold-light"
             >
               Add
             </Button>
